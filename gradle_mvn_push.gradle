@@ -1,0 +1,38 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = "com.susion.opendev"
+version = "1.0.0"
+
+def getPropertyFromLocalProperties(key) {
+    File file = project.rootProject.file('local.properties')
+    if (file.exists()) {
+        Properties properties = new Properties()
+        properties.load(file.newDataInputStream())
+        return properties.getProperty(key)
+    }
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: getPropertyFromLocalProperties("RELEASE_REPOSITORY_URL")) {
+            authentication(userName: getPropertyFromLocalProperties("USER"), password: getPropertyFromLocalProperties("PASSWORD"))
+        }
+    }
+}
+
+bintray {
+    user = getPropertyFromLocalProperties("bintray.user")
+    key = getPropertyFromLocalProperties("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = "${project.group}:${project.name}"
+        userOrg = 'susion'
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/SusionSuc'
+        vcsUrl = ''
+        publish = true
+    }
+}

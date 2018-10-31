@@ -1,0 +1,25 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:2.3.3'
+
+    compile project(':interface')
+}
+
+
+group 'com.susion.implloader'
+version '0.0.1'
+
+uploadArchives {
+    repositories {
+        flatDir {
+            name "../localRepo"
+            dir "../localRepo/libs/implloader"
+        }
+    }
+}
